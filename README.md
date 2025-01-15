@@ -34,7 +34,7 @@ A containerized static website showcasing my professional experience and skills 
 1. Clone the repository:
 ```bash
 git clone https://github.com/kwbna-ababi/cv-app.git
-cd resume-website
+cd cv-app
 ```
 
 2. Build the Docker image:
