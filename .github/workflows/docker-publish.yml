@@ -19,15 +19,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Docker Build
-      run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
-
-    - name: Docker Login
-      run: docker login --username=${{ vars.DOCKERHUB_USERNAME }} --password=${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Publish code to DockerHub
-      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-
     - name: GHCR Login
       uses: docker/login-action@v2.2.0
       with:
