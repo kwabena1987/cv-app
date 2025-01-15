@@ -3,8 +3,8 @@
 A containerized static website showcasing my professional experience and skills as a DevOps Engineer. This project demonstrates various DevOps practices including containerization, CI/CD, and infrastructure as code.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Docker Pulls](https://img.shields.io/docker/pulls/YOUR_DOCKERHUB_USERNAME/resume-website)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YOUR_GITHUB_USERNAME/resume-website/docker-build.yml)
+![Docker Pulls](https://img.shields.io/docker/pulls/kwabena1987/cv-app-website)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kwbna-ababi/cv-app-website/docker-build.yml)
 
 ## 🚀 Features
 
