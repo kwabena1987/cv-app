@@ -33,7 +33,7 @@ A containerized static website showcasing my professional experience and skills 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/resume-website.git
+git clone https://github.com/kwbna-ababi/cv-app.git
 cd resume-website
 ```
 
@@ -60,10 +60,10 @@ To deploy manually:
 
 ```bash
 # Pull the image
-docker pull YOUR_DOCKERHUB_USERNAME/resume-website:latest
+docker pull kwabena1987/resume-website:latest
 
 # Run the container
-docker run -d -p 80:80 YOUR_DOCKERHUB_USERNAME/resume-website:latest
+docker run -d -p 80:80 kwabena1987/resume-website:latest
 ```
 
 ## 📁 Project Structure
