@@ -39,12 +39,12 @@ cd cv-app
 
 2. Build the Docker image:
 ```bash
-docker build -t resume-website .
+docker build -t cv-app-website .
 ```
 
 3. Run the container:
 ```bash
-docker run -d -p 8080:80 resume-website
+docker run -d -p 8080:80 cv-app-website
 ```
 
 4. Access the website at `http://localhost:8080`
@@ -60,10 +60,10 @@ To deploy manually:
 
 ```bash
 # Pull the image
-docker pull kwabena1987/resume-website:latest
+docker pull kwabena1987/cv-app-website:latest
 
 # Run the container
-docker run -d -p 80:80 kwabena1987/resume-website:latest
+docker run -d -p 80:80 kwabena1987/cv-app-website:latest
 ```
 
 ## 📁 Project Structure
