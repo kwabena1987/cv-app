@@ -4,7 +4,7 @@ A containerized static website showcasing my professional experience and skills 
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/kwabena1987/cv-app-website)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kwbna-ababi/cv-app/docker-build.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kwbna-ababi/cv-app/docker-publish.yml)
 
 ## 🚀 Features
 
