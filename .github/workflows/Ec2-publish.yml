@@ -1,42 +1,17 @@
-name: Deploy cv-App to EC2
-
+name: Basic deploy
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  deploy:
-    environment: production
-    name: Deploy to EC2
+  EC2-Deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout the files
-        uses: actions/checkout@v4
-
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
+      - id: deploy
+        uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.EC2_USER }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_default_region: eu-west-1b
 
-      - name: Executing remote ssh commands using ssh key
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            sudo apt-get -y update
-            sudo apt-get install -y apache2
-            sudo systemctl daemon-reload
-            sudo systemctl start apache2
-            sudo systemctl enable apache2
-            cd home
-            # Remove existing contents of /var/www/html
-            sudo rm -rf /var/www/html/*
-            # Move new files to /var/www/html
-            sudo mv * /var/www/html
+          aws_elb_app_port: 8080 # This should match the docker exposed port. Defaults to 3000.
