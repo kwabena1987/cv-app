@@ -1,0 +1,111 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: eu-west-1b
+  EC2_INSTANCE_TAG: cv-app
+  DOCKER_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/cv-app:latest
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update
+
+      - name: Get EC2 Instance IP
+        run: |
+          INSTANCE_IP=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=${{ env.EC2_INSTANCE_TAG }}" \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
+            --output text)
+          echo "EC2_IP=$INSTANCE_IP" >> $GITHUB_ENV
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem
+          echo -e "Host ec2\n\tHostName ${{ env.EC2_IP }}\n\tUser ec2-user\n\tIdentityFile ~/.ssh/key.pem\n\tStrictHostKeyChecking no" > ~/.ssh/config
+
+      - name: Deploy to EC2
+        run: |
+          ssh ec2 '
+            # Update system packages
+            sudo yum update -y
+
+            # Install or update Docker if needed
+            if ! command -v docker &> /dev/null; then
+              sudo yum install -y docker
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -a -G docker ec2-user
+            fi
+
+            # Login to Docker Hub
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ vars.DOCKERHUB_USERNAME }}" --password-stdin
+
+            # Stop and remove existing container if it exists
+            docker ps -q --filter name=resume-website | grep -q . && docker stop resume-website
+            docker ps -aq --filter name=resume-website | grep -q . && docker rm resume-website
+
+            # Pull latest image
+            docker pull ${{ env.DOCKER_IMAGE }}
+
+            # Run new container
+            docker run -d \
+              --name resume-website \
+              --restart unless-stopped \
+              -p 80:80 \
+              ${{ env.DOCKER_IMAGE }}
+
+            # Clean up old images
+            docker system prune -af
+          '
+
+      - name: Health check
+        run: |
+          echo "Waiting for application to start..."
+          for i in {1..30}; do
+            if curl -s "http://${{ env.EC2_IP }}" > /dev/null; then
+              echo "Application is running!"
+              exit 0
+            fi
+            echo "Attempt $i/30: Application not ready yet..."
+            sleep 10
+          done
+          echo "Application failed to start"
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf ~/.ssh/key.pem
+
+permissions:
+  contents: read
+  packages: read
