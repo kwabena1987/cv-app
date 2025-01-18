@@ -3,8 +3,8 @@
 A containerized static website showcasing my professional experience and skills as a DevOps Engineer. This project demonstrates various DevOps practices including containerization, CI/CD, and infrastructure as code.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Docker Pulls](https://img.shields.io/docker/pulls/kwabena1987/cv-app-website)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kwbna-ababi/cv-app/docker-publish.yml)
+![Docker Pulls](https://img.shields.io/docker/pulls/kwabena1987/cv-app)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kwabena1987/cv-app/docker-build.yml)
 
 ## 🚀 Features
 
@@ -14,7 +14,7 @@ A containerized static website showcasing my professional experience and skills 
 - Optimized Nginx configuration for static content delivery
 - Docker Hub integration for container registry
 
-## 🛠️ Tools Used
+## 🛠️ Technologies Used
 
 - HTML5/CSS3
 - Docker
@@ -33,18 +33,18 @@ A containerized static website showcasing my professional experience and skills 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/kwbna-ababi/cv-app.git
+git clone https://github.com/kwabena1987/cv-app.git
 cd cv-app
 ```
 
 2. Build the Docker image:
 ```bash
-docker build -t cv-app-website .
+docker build -t cv-app .
 ```
 
 3. Run the container:
 ```bash
-docker run -d -p 8080:80 cv-app-website
+docker run -d -p 8080:80 cv-app
 ```
 
 4. Access the website at `http://localhost:8080`
@@ -60,10 +60,10 @@ To deploy manually:
 
 ```bash
 # Pull the image
-docker pull kwabena1987/cv-app-website:latest
+docker pull YOUR_DOCKERHUB_USERNAME/cv-app:latest
 
 # Run the container
-docker run -d -p 80:80 kwabena1987/cv-app-website:latest
+docker run -d -p 80:80 YOUR_DOCKERHUB_USERNAME/cv-app:latest
 ```
 
 ## 📁 Project Structure
@@ -107,7 +107,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Contact
 
 - LinkedIn: [Bright Darko Ababio](https://www.linkedin.com/in/bright-ababio)
-- Email: darkosloutions@gmail.com
+- Email: dkwabena44@gmail.com
 
 ## 🙏 Acknowledgments
 
